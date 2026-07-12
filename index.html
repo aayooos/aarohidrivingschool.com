@@ -1,0 +1,1987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Aarohi Driving School – Pimple Saudagar & Punawale, Pune</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&family=Space+Mono:wght@400;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root {
+  /* Custom Client Palette */
+  --black: #2A2A2A;        /* Dark Charcoal for dominant typography */
+  --dark: #FFF9EB;         /* Vanilla Custard (Main Body Background) */
+  --card: #FFFFFF;         /* Stark Pure White for content card blocks */
+  --border: #9FB2AC;       /* Misty Sage for borders and accents */
+  --red: #5D0D18;          /* Bloodstone for primary trust CTAs */
+  --red2: #3F070F;         /* Darker Bloodstone for smooth hover transitions */
+  --white: #2A2A2A;        /* Dark Charcoal for highly legible body copy */
+  --muted: #5E6E6A;        /* Darker Sage for secondary metrics */
+  --dim: #9FB2AC;          /* Soft slate accent details */
+  --gold: #EAB308;         /* High-end Amber Gold for feedback systems */
+}
+html{scroll-behavior:smooth}
+body{background:var(--dark);color:var(--white);font-family:'DM Sans',sans-serif;overflow-x:hidden;line-height:1.6; padding-left: 60px;} 
+
+/* ─── DYNAMIC CURVED ROAD ─── */
+#road-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100vh;
+  z-index: 150;
+  pointer-events: none;
+}
+#curve-path {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 24;
+}
+#curve-line {
+  fill: none;
+  stroke: var(--dark);
+  stroke-width: 2;
+  stroke-dasharray: 10 10;
+}
+#scrolling-car {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 32px;
+  height: 32px;
+  z-index: 151;
+  pointer-events: none;
+  margin-left: -16px; 
+  margin-top: -16px;
+  will-change: transform;
+}
+
+/* ─── SPEED LINES ─── */
+.speed-lines{
+  position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;
+  overflow:hidden;opacity:1;transition:opacity .4s ease .9s;
+}
+.speed-lines.done{opacity:0}
+.sl{
+  position:absolute;height:1px;background:var(--red);
+  left:-60%;width:60%;
+  animation:shoot .65s cubic-bezier(.4,0,.2,1) forwards;
+}
+.sl:nth-child(1){top:38%;animation-delay:.05s;opacity:.9;height:2px}
+.sl:nth-child(2){top:40%;animation-delay:.1s;opacity:.5}
+.sl:nth-child(3){top:42%;animation-delay:.08s;opacity:.7;height:1.5px}
+.sl:nth-child(4){top:44%;animation-delay:.15s;opacity:.3}
+.sl:nth-child(5){top:46%;animation-delay:.12s;opacity:.6}
+@keyframes shoot{0%{left:-60%;opacity:1}100%{left:110%;opacity:0}}
+
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;justify-content:space-between;align-items:center;
+  padding:0 5%;height:64px;
+  background:rgba(255, 255, 255, 0.96);
+  border-bottom:1px solid var(--border);
+  backdrop-filter:blur(16px);
+  padding-left: 80px; 
+}
+.logo {
+  display:flex;
+  align-items:center;
+  text-decoration:none;
+  height: 100%;
+}
+.brand-logo-img {
+  height: 54px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0px 1px 3px rgba(0, 0, 0, 0.08));
+  transition: transform 0.3s ease;
+}
+.logo:hover .brand-logo-img {
+  transform: scale(1.02);
+}
+.nav-links{display:flex;gap:2rem;list-style:none}
+.nav-links a{
+  font-family:'Space Mono',monospace;
+  font-size:.82rem;font-weight:700;color:var(--muted);text-decoration:none;
+  transition:color .2s;letter-spacing:.05em; text-transform: uppercase;
+}
+.nav-links a:hover{color:var(--black)}
+.nav-cta{
+  background:var(--red);color:#FFFFFF;
+  padding:.5rem 1.3rem;
+  font-family:'Space Mono',monospace;font-weight:700;font-size:.82rem;
+  text-decoration:none;letter-spacing:.04em;
+  transition:background .2s, color .2s;
+  border:none;cursor:pointer;
+  text-transform: uppercase;
+}
+.nav-cta:hover{background:var(--red2); color:#FFFFFF;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px}
+.hamburger span{width:22px;height:1.5px;background:var(--red);display:block}
+
+/* ─── HERO ─── */
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;align-items:center;
+  padding:80px 5% 4rem;
+  overflow:hidden;
+  background: var(--card);
+}
+.hero-road{
+  position:absolute;bottom:0;left:0;right:0;height:80px;
+  background:var(--dark);
+  border-top:3px solid var(--border);
+  overflow:hidden;
+}
+.hero-road::before{
+  content:'';position:absolute;top:50%;left:0;right:0;height:3px;
+  transform:translateY(-50%);
+  background:repeating-linear-gradient(90deg,var(--border) 0,var(--border) 40px,transparent 40px,transparent 80px);
+}
+.hero-road::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:4px;
+  background:var(--red);
+}
+.hero-content{position:relative;z-index:1;max-width:1200px;width:100%;margin:0 auto}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:.6rem;
+  font-family:'Space Mono',monospace;font-size:.68rem;
+  color:var(--muted);letter-spacing:.12em;text-transform:uppercase;
+  margin-bottom:2rem; font-weight: 700;
+}
+.hero-tag::before{content:'';width:24px;height:1.5px;background:var(--border)}
+.hero h1{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(2rem,5.5vw,5rem);
+  line-height:1.05;letter-spacing:-.02em;
+  margin-bottom:1.8rem;
+  max-width:100%; text-transform:uppercase;
+  color: var(--black);
+  width:100%;
+}
+.hero h1 .red{color:var(--red)}
+.hero h1 .outline{
+  -webkit-text-stroke:2px var(--red);
+  color:transparent;
+}
+.h1-row{display:flex;align-items:center;width:100%;}
+.h1-text-left{white-space:nowrap; text-align:left; flex-shrink:0;}
+.h1-text-right{white-space:nowrap; text-align:right; flex-shrink:0;}
+.h1-space-left{flex:1; display:flex; align-items:center; justify-content:flex-start; padding-left:1rem;}
+.h1-space-right{flex:1; display:flex; align-items:center; justify-content:flex-end; padding-right:1rem;}
+.h1-icon{color:var(--red); opacity:0.18; flex-shrink:0;}
+.h1-icon-right{height:clamp(1.8rem,4vw,3.5rem); width:auto;}
+.h1-icon-left{height:clamp(1.8rem,4vw,3.5rem); width:auto;}
+.hero-row{display:flex;align-items:flex-end;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.hero-left{flex:1;min-width:300px}
+.hero-right{min-width:260px}
+.hero-sub{
+  font-size:1.05rem;color:var(--white);max-width:550px;
+  line-height:1.8;margin-bottom:2.5rem;
+}
+.hero-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:3rem}
+.btn-red{
+  background:var(--red);color:#FFFFFF;
+  padding:.85rem 2rem;
+  font-family:'Space Mono',monospace;font-weight:700;font-size:.9rem;
+  text-decoration:none;letter-spacing:.04em; text-transform: uppercase;
+  transition:background .2s,transform .15s;
+  display:inline-flex;align-items:center;gap:.5rem;
+}
+.btn-red:hover{background:var(--red2);transform:translateY(-2px);color:#FFFFFF;}
+.btn-outline{
+  background:transparent;color:var(--red);
+  padding:.85rem 2rem;
+  font-family:'Space Mono',monospace;font-weight:700;font-size:.9rem;
+  text-decoration:none;letter-spacing:.04em; text-transform: uppercase;
+  border:1px solid var(--red);
+  transition:border-color .2s,transform .15s, background .2s, color .2s;
+  display:inline-flex;align-items:center;gap:.5rem;
+}
+.btn-outline:hover{background:var(--red); color:#FFFFFF; transform:translateY(-2px)}
+.hero-stats{display:flex;gap:2.5rem;flex-wrap:wrap}
+.stat{display:flex;flex-direction:column;gap:.2rem}
+.stat-n{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:2.8rem;color:var(--black);line-height:1;
+}
+.stat-l{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+
+/* Speedometer */
+.speedo{position:relative;width:200px;height:200px}
+.speedo svg{width:100%;height:100%}
+
+/* ─── SECTIONS ─── */
+section{padding:6rem 5%;position:relative}
+.si{max-width:1200px;margin:0 auto}
+.eyebrow{
+  font-family:'Space Mono',monospace;font-size:.65rem;
+  color:var(--red);letter-spacing:.2em;text-transform:uppercase;
+  margin-bottom:.8rem;display:flex;align-items:center;gap:.7rem;
+}
+.eyebrow::before{content:'';width:20px;height:1.5px;background:var(--red)}
+.sec-title{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(2.5rem,5vw,4rem);
+  letter-spacing:-.02em;line-height:1;
+  margin-bottom:.8rem; text-transform: uppercase;
+  color: var(--black);
+}
+.sec-sub{color:var(--white); max-width:500px;font-size:.95rem;line-height:1.8;margin-bottom:3rem}
+
+/* ─── TICKER ─── */
+.ticker{
+  background:var(--card);padding:.7rem 0;
+  overflow:hidden;white-space:nowrap;
+  margin-left: -60px;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.ticker-inner{
+  display:inline-flex;gap:0;
+  animation:tick 25s linear infinite;
+}
+.ticker-item{
+  font-family:'Space Mono',monospace;font-size:.72rem;
+  color:var(--black);letter-spacing:.1em;text-transform:uppercase;
+  padding:0 2.5rem; font-weight: 700;
+}
+.ticker-sep{color:var(--red);padding:0 .5rem}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ─── TRACK PRACTICE CALLOUT ─── */
+.track-banner {
+  background: var(--card);
+  border: 2px dashed var(--red);
+  padding: 2rem;
+  text-align: center;
+  margin-top: 3rem;
+}
+.track-banner h3 {
+  font-family: 'Syne', sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--black);
+}
+.track-banner p {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  color: var(--white);
+}
+
+/* ─── PACKAGES ─── */
+#courses{background:var(--dark)}
+.pkg-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--border)}
+.pkg{
+  background:var(--card);padding:2.5rem 2rem;
+  position:relative;transition:background .2s;
+  overflow:hidden;
+  min-width:0;
+}
+.pkg::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--red);transform:scaleY(0);transform-origin:top;
+  transition:transform .3s ease;
+}
+.pkg:hover::before{transform:scaleY(1)}
+.pkg-label{
+  font-family:'Space Mono',monospace;font-size:.65rem;
+  color:var(--muted);letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:1rem;
+}
+.pkg-name{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:clamp(1.6rem,2.4vw,2.8rem);letter-spacing:-.02em;margin-bottom:.1rem; text-transform:uppercase; line-height:1;
+  color: var(--black);
+  white-space: nowrap;
+}
+.pkg-highlight {
+  background: rgba(93, 13, 24, 0.05);
+  border: 1px solid var(--border);
+  color: var(--black);
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 0.5rem;
+  text-transform: uppercase;
+  margin: 1rem 0;
+  letter-spacing: 0.05em;
+  text-align: center;
+}
+.pkg-vehicle{font-size:.82rem;color:var(--muted);margin-bottom:1.5rem; font-weight: 600;}
+.pkg-price-block{margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid var(--border)}
+.pkg-with{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:.3rem; font-weight: 700;}
+.pkg-amount{
+  font-family:'Syne',sans-serif;font-weight:800;
+  font-size:3.2rem;color:var(--red);line-height:1;letter-spacing:-.02em;
+}
+.pkg-without{font-size:.82rem;color:var(--white);margin-top:.5rem; font-weight:600;}
+.pkg-features{list-style:none}
+.pkg-features li{
+  font-size:.88rem;color:var(--white);
+  padding:.55rem 0;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:.7rem;
+}
+.pkg-features li:last-child{border:none}
+.pkg-features li::before{content:'→';color:var(--red);font-size:.8rem;flex-shrink:0; font-family:'Space Mono',monospace;}
+.pkg-cta{
+  display:block;margin-top:2rem;
+  background:transparent;border:1px solid var(--border);
+  color:var(--black);padding:.75rem;text-align:center;
+  font-family:'Space Mono',monospace;font-weight:700;font-size:.85rem;
+  text-decoration:none;letter-spacing:.04em; text-transform:uppercase;
+  transition:background .2s,border-color .2s, color .2s;
+}
+.pkg-cta:hover{background:var(--red);border-color:var(--red); color:#FFFFFF;}
+.pkg.featured{background:var(--card); outline: 2px solid var(--red); outline-offset: -2px;}
+.pkg.featured .pkg-cta{background:var(--red);border-color:var(--red); color:#FFFFFF;}
+.pkg.featured .pkg-cta:hover{background:var(--red2)}
+.pkg-badge{
+  position:absolute;top:2rem;right:2rem;
+  font-family:'Space Mono',monospace;font-size:.6rem;
+  color:#FFFFFF; background:var(--black); letter-spacing:.1em; 
+  padding:.3rem .6rem;text-transform:uppercase; font-weight: 700;
+}
+
+/* ─── TRAINING / TIMINGS / LOCATIONS ─── */
+#training{background:var(--card)}
+.training-layout{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+.module-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.module-item{
+  background:var(--card);padding:1rem 1.2rem;
+  font-size:.85rem;color:var(--white); font-weight: 600;
+  display:flex;align-items:center;gap:.6rem;
+  transition:background .2s,color .2s;
+}
+.module-item:hover{background:var(--dark);color:var(--red);}
+.module-item::before{content:'';width:4px;height:4px;background:var(--red);flex-shrink:0} 
+.timing-block{margin-top:2.5rem}
+.timing-block h3{
+  font-family:'Space Mono',monospace;font-weight:700;font-size:1rem;
+  margin-bottom:1rem;letter-spacing:.02em; text-transform: uppercase; color:var(--red);
+}
+.t-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:.7rem 0;border-bottom:1px solid var(--border);
+  font-size:.88rem; font-weight: 600;
+}
+.t-row:last-child{border:none}
+.t-val{font-family:'Space Mono',monospace;font-size:.8rem;color:var(--black); font-weight:700;}
+.vehicles-block{margin-top:2.5rem}
+.v-card{
+  background:var(--card);border:1px solid var(--border);
+  padding:1.2rem 1.5rem;margin-bottom:1px;
+  display:flex;align-items:center;justify-content:space-between;
+  transition:border-color .2s, background .2s;
+}
+.v-card:hover{border-color:var(--red); background:var(--dark);}
+.v-name{font-family:'Space Mono',monospace;font-weight:700;font-size:.9rem; text-transform: uppercase; color:var(--black);}
+.v-pkg{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-top:.2rem}
+
+/* ─── RTO WORK ─── */
+#rto{background:var(--dark)}
+.rto-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)}
+.rto-block{background:var(--card);padding:2.5rem 2rem}
+.rto-block h3{
+  font-family:'Space Mono',monospace;font-weight:700;font-size:1.1rem;
+  margin-bottom:1.5rem;letter-spacing:.02em; text-transform: uppercase; color:var(--red);
+}
+.rto-list{list-style:none}
+.rto-list li{
+  font-size:.88rem;color:var(--white); font-weight:600;
+  padding:.5rem 0;border-bottom:1px solid var(--border);
+  display:flex;align-items:flex-start;gap:.7rem;line-height:1.5;
+}
+.rto-list li:last-child{border:none}
+.rto-list li::before{content:'✓';color:var(--red);font-size:.75rem;flex-shrink:0;margin-top:.15rem; font-family:'Space Mono',monospace;}
+
+/* ─── REVIEWS ─── */
+#reviews{background:var(--card)}
+.reviews-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2rem;}
+.reviews-slideshow{position:relative;max-width:780px;margin:2rem auto 0;overflow:hidden;}
+.reviews-track{display:flex;transition:transform 0.5s ease;}
+.review-card{background:var(--card);border:1px solid var(--border);padding:2.5rem;flex:0 0 100%;box-sizing:border-box;}
+.rev-stars{color:var(--gold);font-size:1.2rem;margin-bottom:1rem;}
+.rev-text{font-size:0.95rem;font-style:italic;color:var(--white);margin-bottom:1.8rem;line-height:1.7;}
+.rev-user{font-family:'Space Mono',monospace;font-size:0.85rem;font-weight:700;text-transform:uppercase;color:var(--black);}
+.rev-platform{font-size:0.7rem;color:var(--muted);display:block;margin-top:0.2rem;}
+.rev-nav{display:flex;align-items:center;justify-content:center;gap:1.2rem;margin-top:1.5rem;}
+.rev-btn{background:none;border:1px solid var(--border);color:var(--black);width:38px;height:38px;cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;transition:border-color 0.2s,color 0.2s;}
+.rev-btn:hover{border-color:var(--red);color:var(--red);}
+.rev-dots{display:flex;gap:0.5rem;}
+.rev-dot{width:7px;height:7px;border-radius:50%;background:var(--border);cursor:pointer;transition:background 0.2s;}
+.rev-dot.active{background:var(--red);}
+.rev-maps-cta{text-align:center;margin-top:2.5rem;}
+.rev-maps-label{font-family:'Space Mono',monospace;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:1rem;}
+.rev-maps-btns{display:flex;justify-content:center;gap:1rem;flex-wrap:wrap;}
+.rev-maps-btn{display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.6rem;border:1px solid var(--border);color:var(--black);text-decoration:none;font-family:'Space Mono',monospace;font-size:0.78rem;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;transition:border-color 0.2s,color 0.2s;}
+.rev-maps-btn:hover{border-color:var(--red);color:var(--red);}
+.rev-maps-sub{font-size:0.72rem;color:var(--muted);margin-top:0.8rem;}
+
+/* ─── TRUST BANNER ─── */
+.trust-banner{background:var(--card);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:3rem 0;}
+.trust-grid{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:1rem;}
+.trust-item{text-align:center;display:flex;flex-direction:column;gap:0.4rem;padding:1rem;transition:transform 0.3s ease, box-shadow 0.3s ease;}
+.trust-item.highlight {
+  background: var(--red);
+  border: 2px solid var(--red);
+  border-radius: 8px;
+  transform: scale(1.08);
+  box-shadow: 0 8px 30px rgba(93,13,24,0.25);
+  padding: 1.5rem;
+}
+.trust-item.highlight .trust-num{color:#FFF9EB;}
+.trust-item.highlight .trust-label{color:#FFF9EB;}
+.trust-item.highlight .trust-sub{color:rgba(255,249,235,0.8);}
+.trust-num{font-family:'Space Mono',monospace;font-size:2.2rem;font-weight:700;color:var(--red);line-height:1;}
+.trust-label{font-family:'Space Mono',monospace;font-size:0.78rem;text-transform:uppercase;letter-spacing:0.06em;color:var(--black);font-weight:700;}
+.trust-sub{font-size:0.78rem;color:var(--muted);line-height:1.5;}
+.trust-divider{width:1px;height:80px;background:var(--border);}
+.women-banner{
+  display:flex;align-items:center;gap:1.5rem;
+  margin-top:2rem;padding:1.5rem 2rem;
+  background:linear-gradient(135deg, rgba(93,13,24,0.06) 0%, rgba(159,178,172,0.15) 100%);
+  border:1px solid rgba(159,178,172,0.5);
+  border-left:4px solid var(--red);
+  border-radius:0 8px 8px 0;
+}
+.women-icon{font-size:2.5rem;color:var(--red);line-height:1;flex-shrink:0;}
+.women-icon-svg{width:110px;height:130px;color:var(--red);flex-shrink:0;opacity:0.9;}
+.v-car-icon{height:32px;width:auto;color:var(--red);opacity:0.5;}
+.training-illustration{margin-top:2rem;display:flex;justify-content:center;}
+.training-illus-svg{width:100%;max-width:340px;color:var(--red);opacity:0.75;}
+.contact-illus{margin-top:2rem;display:flex;justify-content:center;}
+.retro-car-svg{width:100%;max-width:340px;color:var(--red);opacity:0.7;}
+.women-text{display:flex;flex-direction:column;gap:0.3rem;}
+.women-title{font-family:'Space Mono',monospace;font-size:0.85rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--red);}
+.women-sub{font-size:0.85rem;color:var(--muted);line-height:1.6;max-width:700px;}
+
+/* ─── WHY ─── */
+#why{background:var(--dark)}
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.why-card{
+  background:var(--card);padding:2.5rem 2rem;
+  transition:background .2s;position:relative;overflow:hidden;
+}
+.why-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:var(--red);transform:scaleX(0);transform-origin:left;
+  transition:transform .3s ease;
+}
+.why-card:hover{background:var(--dark)}
+.why-card:hover::after{transform:scaleX(1)}
+.why-num{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1.5rem;
+  color:var(--dim);letter-spacing:.1em;margin-bottom:.5rem;display:block;
+}
+.why-card h3{font-family:'Space Mono',monospace;font-weight:700;font-size:1rem;margin-bottom:.6rem; text-transform: uppercase; color:var(--black);}
+.why-card p{font-size:.88rem;color:var(--white);line-height:1.7;}
+
+/* ─── SERVICES STRIP ─── */
+#services{background:var(--border);padding:5rem 5%; color:var(--black);}
+#services .eyebrow { color: var(--black); font-weight: 700; }
+#services .eyebrow::before { background: var(--black); }
+#services .sec-title { color: var(--black); }
+.services-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:rgba(42, 42, 42, 0.08);}
+.svc{
+  background:var(--border);padding:2rem 1.5rem;text-align:center;
+  transition:background .2s; color:var(--black);
+}
+.svc:hover{background:var(--black); color:#FFFFFF;}
+.svc:hover h3, .svc:hover p, .svc:hover .svc-icon { color: #FFFFFF; }
+.svc-icon{font-size:1.8rem;margin-bottom:.8rem;display:block; color:var(--black);}
+.svc h3{font-family:'Space Mono',monospace;font-weight:700;font-size:.85rem;margin-bottom:.3rem;letter-spacing:.02em; color:var(--black); text-transform: uppercase;}
+.svc p{font-family:'Space Mono', monospace; font-size:.7rem;color:var(--white);line-height:1.5; font-weight: 700; text-transform: uppercase;}
+
+/* ─── CONTACT ─── */
+#contact{background:var(--dark)}
+.contact-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:5rem;align-items:start}
+.contact-info h2{margin-bottom:2rem; color:var(--red);}
+.c-row{
+  display:flex;align-items:flex-start;gap:1.2rem;
+  margin-bottom:1.8rem;
+}
+.c-row:last-child{margin-bottom:0}
+.c-line{width:1px;background:var(--border);align-self:stretch;flex-shrink:0}
+.c-label{
+  font-family:'Space Mono',monospace;font-size:.65rem;
+  color:var(--muted);letter-spacing:.12em;text-transform:uppercase;margin-bottom:.3rem; font-weight:700;
+}
+.c-val{font-size:.95rem;font-weight:600; color:var(--black);}
+.c-val a{color:var(--black);text-decoration:none;transition:color .2s}
+.c-val a:hover{color:var(--red)}
+.hours-block{background:var(--card);border:1px solid var(--border);padding:2rem;}
+.hours-block h3{
+  font-family:'Space Mono',monospace;font-weight:700;font-size:1rem;
+  margin-bottom:1.5rem;letter-spacing:.02em; text-transform: uppercase; color:var(--red);
+}
+.h-row{
+  display:flex;justify-content:space-between;
+  padding:.6rem 0;border-bottom:1px solid var(--border);font-size:.88rem; font-weight: 600;
+}
+.h-row:last-child{border:none}
+.h-time{font-family:'Space Mono',monospace;font-size:.8rem;color:var(--black); font-weight:700;}
+.whatsapp{
+  display:flex;align-items:center;justify-content:center;gap:.7rem;
+  background:var(--red);color:#FFFFFF;
+  padding:1rem;margin-top:1.5rem;
+  font-family:'Space Mono',monospace;font-weight:700;font-size:.85rem; text-transform: uppercase;
+  text-decoration:none;transition:background .2s;letter-spacing:.03em;
+}
+.whatsapp:hover{background:var(--red2); color:#FFFFFF;}
+
+/* ─── PREMIUM GALLERY SECTION ─── */
+#gallery {
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+.gallery-item {
+  position: relative;
+  background: var(--dark);
+  border: 1px solid var(--border);
+  overflow: hidden;
+  aspect-ratio: 4 / 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.3s ease;
+}
+.gallery-item img, .gallery-item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.gallery-item:hover {
+  border-color: var(--red);
+}
+.gallery-item:hover img, .gallery-item:hover video {
+  transform: scale(1.05);
+}
+.video-badge {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: var(--black);
+  color: #FFFFFF;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.6rem;
+  text-transform: uppercase;
+  z-index: 3;
+  letter-spacing: 0.08em;
+  pointer-events: none;
+}
+
+/* ─── LIGHTBOX INTERACTIVE MODAL ─── */
+.lightbox-modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(42, 42, 42, 0.96);
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+.lightbox-content {
+  position: relative;
+  max-width: 85%;
+  max-height: 80vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-img, .lightbox-video {
+  display: none;
+  max-width: 100%;
+  max-height: 80vh;
+  object-fit: contain;
+  border: 2px solid var(--border);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  background: #000;
+}
+.lightbox-btn {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid var(--border);
+  color: var(--black);
+  font-family: 'Space Mono', monospace;
+  font-weight: 700;
+  font-size: 1.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  z-index: 10000;
+}
+.lightbox-btn:hover {
+  background: var(--red);
+  border-color: var(--red);
+  color: #FFFFFF;
+}
+.lightbox-close {
+  top: -50px;
+  right: 0;
+  font-size: 1.2rem;
+  padding: 0.3rem 0.8rem;
+}
+.lightbox-prev {
+  left: -70px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.lightbox-next {
+  right: -70px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+@media (max-width: 768px) {
+  .lightbox-prev { left: 10px; top: auto; bottom: -60px; transform: none; }
+  .lightbox-next { right: 10px; top: auto; bottom: -60px; transform: none; }
+  .lightbox-close { top: -50px; right: 10px; }
+}
+
+/* ─── DOCUMENTS & TERMS ─── */
+#documents{background:var(--dark)}
+.doc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.doc-card{background:var(--card);padding:2rem 1.8rem}
+.doc-card h3{
+  font-family:'Space Mono',monospace;font-weight:700;font-size:.9rem;
+  color:var(--red);text-transform:uppercase;letter-spacing:.06em;
+  margin-bottom:1.2rem;padding-bottom:.8rem;border-bottom:1px solid var(--border);
+}
+.doc-list{list-style:none}
+.doc-list li{
+  font-size:.85rem;color:var(--white); font-weight: 600;
+  padding:.4rem 0;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:.6rem;
+}
+.doc-list li:last-child{border:none}
+.doc-list li::before{content:'—';color:var(--dim);font-size:.7rem}
+
+/* Terms Block Layout */
+.terms-container {
+  margin-top: 3rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--red);
+  padding: 2.5rem;
+}
+.terms-container h3 {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.1rem;
+  color: var(--red);
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+}
+.terms-grid-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.term-box {
+  background: var(--dark);
+  padding: 1.2rem;
+  border-radius: 2px;
+}
+.term-box h4 {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+.term-box p {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--black);
+}
+
+/* ─── FOOTER ─── */
+footer{
+  background:var(--card);border-top:1px solid var(--border);
+  padding:3.5rem 5% 2rem;
+}
+.footer-inner{max-width:1200px;margin:0 auto}
+.footer-top{
+  display:grid;grid-template-columns:1.5fr 1fr 1fr;
+  gap:4rem;margin-bottom:3rem;
+  padding-bottom:3rem;border-bottom:1px solid var(--border);
+}
+.f-brand-name{
+  font-family:'Syne',sans-serif;font-weight:800;font-size:1.6rem;
+  margin-bottom:.8rem;letter-spacing:.05em; color:var(--red); text-transform: uppercase; line-height:1;
+}
+.f-brand-name span{color:var(--black); font-size:1rem;}
+.f-brand-p{font-size:.85rem;color:var(--white);line-height:1.7;max-width:320px;margin-bottom:1.2rem;}
+.f-col h4{
+  font-family:'Space Mono',monospace;font-size:.65rem;
+  color:var(--muted);letter-spacing:.15em;text-transform:uppercase;
+  margin-bottom:1rem; font-weight:700;
+}
+.f-col ul{list-style:none}
+.f-col ul li{margin-bottom:.65rem}
+.f-col ul li a,.f-col ul li span{
+  font-family:'Space Mono', monospace; font-size:.75rem;color:var(--black);font-weight: 700; text-decoration:none;transition:color .2s; text-transform: uppercase;
+}
+.f-col ul li a:hover{color:var(--red);}
+.footer-bottom{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:1rem;
+}
+.footer-bottom p{font-family:'Space Mono', monospace; font-size:.7rem;color:var(--muted); text-transform: uppercase; font-weight: 700;}
+.footer-credit{
+  width:100%;text-align:center;
+  margin-top:1.5rem;padding-top:1.2rem;
+  border-top:1px solid rgba(159,178,172,0.2);
+}
+.footer-credit a{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  font-family:'Press Start 2P', monospace;font-size:0.55rem;
+  color:var(--muted);text-decoration:none;
+  letter-spacing:0.05em;
+  opacity:0.55;
+  transition:opacity 0.3s ease, color 0.3s ease;
+}
+.footer-credit a:hover{opacity:1;color:var(--red);}
+.footer-credit svg{
+  opacity:0.6;
+  transition:opacity 0.3s ease;
+}
+.footer-credit a:hover svg{opacity:1;}
+
+/* ─── REVEAL ─── */
+.reveal{opacity:0;transform:translateY(20px);transition:opacity .6s ease,transform .6s ease}
+.reveal.visible{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){
+  .reveal,.sl,.ticker-inner{animation:none!important;transition:none!important;opacity:1!important;transform:none!important}
+}
+
+/* ─── MOBILE ─── */
+@media(max-width:960px){
+  body { padding-left: 0; }
+  #road-container, #scrolling-car { display: none; }
+  .pkg-grid,.rto-grid,.why-grid,.doc-grid,.terms-grid-list{grid-template-columns:1fr}
+  .gallery-grid{grid-template-columns:repeat(2,1fr)}
+  .trust-grid{grid-template-columns:1fr;gap:2rem;}
+  .trust-divider{width:80px;height:1px;margin:0 auto;}
+  .women-banner{flex-direction:column;text-align:center;border-left:1px solid rgba(159,178,172,0.5);border-top:4px solid var(--red);border-radius:0 0 8px 8px;}
+  .training-layout{grid-template-columns:1fr}
+  .module-list{grid-template-columns:1fr}
+  .services-grid{grid-template-columns:repeat(3,1fr)}
+  .contact-grid{grid-template-columns:1fr}
+  .footer-top{grid-template-columns:1fr}
+  .nav-links{display:none}
+  .hamburger{display:flex}
+  .hero h1{font-size:clamp(1rem,5vw,1.8rem);}
+  .h1-text-left,.h1-text-right{white-space:normal;}
+  .speedo{display:none}
+  .ticker{margin-left: 0;}
+  nav{padding-left: 5%;}
+}
+
+@media(max-width:600px){
+  section{padding:3rem 4%}
+  .services-grid{grid-template-columns:repeat(2,1fr)}
+
+  /* Hero */
+  .hero{padding:80px 4% 3rem; overflow:hidden;}
+  .hero h1{font-size:clamp(1.6rem,8vw,2.4rem); line-height:1.1;}
+  .h1-row{flex-wrap:wrap; gap:0.3rem;}
+  .h1-text-left,.h1-text-right{white-space:normal; font-size:clamp(1.6rem,8vw,2.4rem);}
+  .h1-space-left,.h1-space-right{display:none;}
+  .hero-row{flex-direction:column; align-items:flex-start;}
+  .hero-stats{gap:1.5rem;}
+  .stat-n{font-size:2rem;}
+  .hero-actions{flex-direction:column; width:100%;}
+  .btn-red,.btn-outline{width:100%; justify-content:center; text-align:center;}
+
+  /* Nav */
+  nav{padding:0 4%; height:60px;}
+  .brand-logo-img{height:42px;}
+  .nav-cta{padding:.4rem 1rem; font-size:.75rem;}
+
+  /* Section titles */
+  .sec-title{font-size:clamp(1.8rem,7vw,2.5rem);}
+  .pkg-name{font-size:clamp(1.4rem,6vw,2rem); white-space:normal;}
+  .pkg-amount{font-size:2.4rem;}
+
+  /* Gallery - 2 columns on mobile */
+  .gallery-grid{grid-template-columns:repeat(2,1fr); gap:0.5rem;}
+
+  /* Packages */
+  .pkg-grid{grid-template-columns:1fr;}
+  .pkg{padding:1.8rem 1.4rem;}
+
+  /* Trust banner */
+  .trust-grid{grid-template-columns:1fr; gap:1rem;}
+  .trust-item.highlight{transform:scale(1);}
+  .trust-num{font-size:1.6rem;}
+
+  /* Training */
+  .training-layout{grid-template-columns:1fr; gap:2rem;}
+  .module-list{grid-template-columns:1fr 1fr;}
+
+  /* Contact */
+  .contact-grid{grid-template-columns:1fr; gap:2rem;}
+
+  /* Footer */
+  .footer-top{grid-template-columns:1fr; gap:2rem;}
+  .footer-bottom{flex-direction:column; text-align:center;}
+
+  /* RTO */
+  .rto-grid{grid-template-columns:1fr;}
+  .rto-block{padding:1.5rem;}
+
+  /* Docs */
+  .doc-grid{grid-template-columns:1fr;}
+  .terms-grid-list{grid-template-columns:1fr;}
+
+  /* Why */
+  .why-grid{grid-template-columns:1fr;}
+
+  /* Women banner */
+  .women-banner{flex-direction:column; text-align:center; padding:1.2rem;}
+  .women-icon-svg{width:70px; height:80px;}
+
+  /* Lightbox */
+  .lightbox-content{max-width:95%;}
+  .lightbox-prev{left:5px;}
+  .lightbox-next{right:5px;}
+
+  /* Services */
+  .services-grid{grid-template-columns:repeat(2,1fr);}
+
+  /* Reviews */
+  .review-card{padding:1.5rem;}
+  .rev-maps-btns{flex-direction:column; align-items:center;}
+
+  /* Ticker */
+  .ticker{margin-left:0;}
+
+  /* Prevent any horizontal overflow */
+  body{overflow-x:hidden;}
+  *{max-width:100%;}
+  img{max-width:100%; height:auto;}
+}
+</style>
+</head>
+<body>
+
+<!-- DYNAMIC ROAD OVERLAY -->
+<div id="road-container">
+  <svg id="road-svg" viewBox="0 0 100 1000" preserveAspectRatio="none" style="width: 100%; height: 100%;">
+    <path id="curve-path" d="M 50 0 C 90 150, 10 300, 50 450 C 90 600, 10 750, 50 900 C 90 980, 50 1000, 50 1000" />
+    <path id="curve-line" d="M 50 0 C 90 150, 10 300, 50 450 C 90 600, 10 750, 50 900 C 90 980, 50 1000, 50 1000" />
+  </svg>
+</div>
+
+<!-- TOP DOWN CAR SVG -->
+<svg id="scrolling-car" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <rect x="30" y="10" width="40" height="80" rx="4" fill="#5D0D18"/>
+  <rect x="35" y="25" width="30" height="20" rx="1" fill="#2A2A2A"/> 
+  <rect x="35" y="65" width="30" height="15" rx="1" fill="#2A2A2A"/> 
+  <rect x="25" y="20" width="8" height="15" rx="1" fill="#9FB2AC"/> 
+  <rect x="67" y="20" width="8" height="15" rx="1" fill="#9FB2AC"/> 
+  <circle cx="38" cy="15" r="4" fill="#FFF9EB"/> 
+  <circle cx="62" cy="15" r="4" fill="#FFF9EB"/> 
+  <rect x="35" y="85" width="10" height="4" fill="#FFF9EB"/> 
+  <rect x="55" y="85" width="10" height="4" fill="#FFF9EB"/> 
+</svg>
+
+<!-- SPEED LINE ENTRANCE -->
+<div class="speed-lines" id="speedLines">
+  <div class="sl"></div><div class="sl"></div><div class="sl"></div><div class="sl"></div><div class="sl"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a class="logo" href="#">
+    <img src="assets/images/image_338501.png" alt="Aarohi Driving School Logo" class="brand-logo-img">
+  </a>
+  <ul class="nav-links">
+    <li><a href="#courses">Packages</a></li>
+    <li><a href="#training">Training Paths</a></li>
+    <li><a href="#rto">RTO Work</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#documents">Documents & Rules</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="tel:8669454636" class="nav-cta">Call Now</a>
+  <div class="hamburger"><span></span><span></span><span></span></div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-road"></div>
+  <div class="hero-content">
+    <div class="hero-tag">One stop all solution · Pimple Saudagar trusted driving school</div>
+    <h1>
+      <h1>
+        <div class="h1-row">
+          <div class="h1-text-left">WE TEACH YOU</div>
+          <div class="h1-space-right">
+            <svg class="h1-icon h1-icon-right" viewBox="0 0 160 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:clamp(3rem,7vw,7rem);opacity:0.2;">
+              <!-- Car body -->
+              <path d="M10 62 L26 36 Q36 22 58 22 L100 22 Q118 22 128 36 L148 62 L148 78 L10 78 Z" fill="currentColor" opacity="0.3"/>
+              <path d="M10 62 L26 36 Q36 22 58 22 L100 22 Q118 22 128 36 L148 62 L148 78 L10 78 Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round" fill="none"/>
+              <!-- Windscreen -->
+              <path d="M42 62 L54 36 L100 36 L114 62 Z" stroke="currentColor" stroke-width="2" fill="none" opacity="0.6"/>
+              <!-- Wheels -->
+              <circle cx="38" cy="78" r="14" stroke="currentColor" stroke-width="3" fill="none"/>
+              <circle cx="38" cy="78" r="6" stroke="currentColor" stroke-width="2" fill="none"/>
+              <circle cx="120" cy="78" r="14" stroke="currentColor" stroke-width="3" fill="none"/>
+              <circle cx="120" cy="78" r="6" stroke="currentColor" stroke-width="2" fill="none"/>
+              <!-- Person head in car -->
+              <circle cx="80" cy="36" r="12" fill="currentColor" opacity="0.25" stroke="currentColor" stroke-width="2"/>
+              <!-- Hair -->
+              <path d="M68 30 Q80 22 92 30" fill="currentColor" opacity="0.5"/>
+              <!-- Arm waving out window -->
+              <path d="M92 44 Q110 34 118 18" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+              <path d="M118 18 L114 10 M118 18 L124 12 M118 18 L122 20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <!-- Speed lines -->
+              <line x1="2" y1="50" x2="18" y2="50" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" opacity="0.5"/>
+              <line x1="2" y1="60" x2="14" y2="60" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.4"/>
+              <line x1="2" y1="70" x2="16" y2="70" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+            </svg>
+          </div>
+        </div>
+        <div class="h1-row">
+          <div class="h1-text-left"><span class="outline">MORE THAN</span></div>
+          <div class="h1-space-right">
+            <svg class="h1-icon h1-icon-right" viewBox="0 0 140 100" fill="none" xmlns="http://www.w3.org/2000/svg" style="height:clamp(2.5rem,6vw,6rem);opacity:0.18;">
+              <!-- Car body rounded friendly shape -->
+              <path d="M8 65 Q14 40 30 30 Q50 18 75 18 Q95 18 110 30 Q126 42 130 65 L130 78 L8 78 Z" fill="currentColor" opacity="0.2"/>
+              <path d="M8 65 Q14 40 30 30 Q50 18 75 18 Q95 18 110 30 Q126 42 130 65 L130 78 L8 78 Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round" fill="none"/>
+              <!-- Window -->
+              <path d="M34 65 Q42 34 68 28 Q90 24 108 40 L112 65 Z" stroke="currentColor" stroke-width="2" fill="none" opacity="0.5"/>
+              <!-- Wheels -->
+              <circle cx="34" cy="78" r="14" stroke="currentColor" stroke-width="3" fill="none"/>
+              <circle cx="34" cy="78" r="5" fill="currentColor" opacity="0.3"/>
+              <circle cx="106" cy="78" r="14" stroke="currentColor" stroke-width="3" fill="none"/>
+              <circle cx="106" cy="78" r="5" fill="currentColor" opacity="0.3"/>
+              <!-- Driver head -->
+              <circle cx="72" cy="38" r="14" fill="currentColor" opacity="0.2" stroke="currentColor" stroke-width="2.5"/>
+              <!-- Hair spiky on top -->
+              <path d="M62 28 Q66 20 72 24 Q78 20 82 28" fill="currentColor" opacity="0.6"/>
+              <!-- Big smile -->
+              <path d="M66 42 Q72 50 78 42" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+              <!-- Eyes happy curved -->
+              <path d="M66 34 Q68 32 70 34" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+              <path d="M74 34 Q76 32 78 34" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/>
+              <!-- Arm on window sill -->
+              <path d="M80 50 Q96 52 110 50" stroke="currentColor" stroke-width="3" stroke-linecap="round" fill="none"/>
+            </svg>
+          </div>
+        </div>
+        <div class="h1-row">
+          <div class="h1-space-left">
+            <!-- Car silhouette -->
+            <svg class="h1-icon h1-icon-left" viewBox="0 0 120 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M10 38 L20 20 Q30 12 50 12 L80 12 Q95 12 105 22 L115 38 L115 48 L10 48 Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round" fill="none"/>
+              <circle cx="30" cy="48" r="8" stroke="currentColor" stroke-width="3" fill="none"/>
+              <circle cx="90" cy="48" r="8" stroke="currentColor" stroke-width="3" fill="none"/>
+              <line x1="50" y1="12" x2="48" y2="38" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="h1-text-right"><span class="outline">HOW TO PASS</span></div>
+        </div>
+        <div class="h1-row">
+          <div class="h1-space-left">
+            <!-- License / document with tick -->
+            <svg class="h1-icon h1-icon-left" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="10" y="8" width="60" height="64" rx="5" stroke="currentColor" stroke-width="3" fill="none"/>
+              <line x1="22" y1="28" x2="58" y2="28" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="22" y1="40" x2="58" y2="40" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <line x1="22" y1="52" x2="44" y2="52" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+              <polyline points="46,58 52,66 66,50" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </div>
+          <div class="h1-text-right"><span class="red">DRIVING TEST.</span></div>
+        </div>
+      </h1>
+    <div class="hero-row">
+      <div class="hero-left">
+        <p class="hero-sub">Professional premium driver ecosystems based across 3 branches in Pimple Saudagar and Punawale. Get comprehensive road exposure with dedicated night, heavy highway, and technical ghat courses.</p>
+        <div class="hero-actions">
+          <a href="#courses" class="btn-red">View Packages →</a>
+          <a href="#contact" class="btn-outline">Contact Details</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat"><span class="stat-n">3,500+</span><span class="stat-l">Students Passed</span></div>
+          <div class="stat"><span class="stat-n">60</span><span class="stat-l">Days Validity</span></div>
+          <div class="stat"><span class="stat-n">Govt.</span><span class="stat-l">Recognised</span></div>
+          <div class="stat"><span class="stat-n">100%</span><span class="stat-l">RTO Paperwork</span></div>
+        </div>
+      </div>
+      <div class="hero-right">
+        <!-- Speedometer SVG -->
+        <div class="speedo">
+          <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="90" fill="none" stroke="var(--border)" stroke-width="12"/>
+            <g stroke="var(--muted)" stroke-width="1.5">
+              <line x1="100" y1="18" x2="100" y2="28" transform="rotate(-130 100 100)"/>
+              <line x1="100" y1="18" x2="100" y2="28" transform="rotate(-104 100 100)"/>
+              <line x1="100" y1="18" x2="100" y2="28" transform="rotate(-78 100 100)"/>
+              <line x1="100" y1="18" x2="100" y2="28" transform="rotate(-52 100 100)"/>
+              <line x1="100" y1="18" x2="100" y2="28" transform="rotate(-26 100 100)"/>
+              <line x1="100" y1="18" x2="100" y2="28" transform="rotate(0 100 100)"/>
+              <line x1="100" y1="18" x2="100" y2="28" transform="rotate(26 100 100)"/>
+              <line x1="100" y1="18" x2="100" y2="28" transform="rotate(52 100 100)"/>
+              <line x1="100" y1="18" x2="100" y2="28" transform="rotate(78 100 100)"/>
+              <line x1="100" y1="18" x2="100" y2="28" transform="rotate(104 100 100)"/>
+              <line x1="100" y1="18" x2="100" y2="28" transform="rotate(130 100 100)"/>
+            </g>
+            <circle cx="100" cy="100" r="90" fill="none" stroke="var(--red)"
+              stroke-width="12" stroke-linecap="round"
+              stroke-dasharray="350" stroke-dashoffset="350"
+              id="speedo-arc" opacity=".9"
+              style="transform-origin:center;transform:rotate(-220deg)" />
+            <line x1="100" y1="100" x2="100" y2="24"
+              stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"
+              id="speedo-needle"
+              style="transform-origin:100px 100px;transform:rotate(-130deg);transition:transform 1.8s cubic-bezier(.4,0,.2,1)"/>
+            <circle cx="100" cy="100" r="7" fill="var(--red)"/>
+            <circle cx="100" cy="100" r="3" fill="var(--card)"/>
+            <text x="100" y="140" text-anchor="middle" fill="var(--black)" font-family="Space Mono,monospace" font-weight="700" font-size="12" letter-spacing="2">SPEED</text>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-inner">
+    <span class="ticker-item">Government Recognised</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Complete within 60 Days</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Night Training Included</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Ghat Training at Pawna Dam</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Comprehensive RTO Assistance</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Strict No Refund Policy</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Swift VDI (Punawale Only)</span><span class="ticker-sep">✦</span>
+    <span class="ticker-item">Vision 9 Mall · Wardhman Palm · Tajne Wasti</span><span class="ticker-sep">✦</span>
+  </div>
+</div>
+
+<!-- TRUST BANNER -->
+<section class="trust-banner">
+  <div class="si">
+    <div class="trust-grid reveal">
+      <div class="trust-item">
+        <span class="trust-num">3,500+</span>
+        <span class="trust-label">Students Successfully Licensed</span>
+        <span class="trust-sub">Across all 3 branches in Pimple Saudagar & Punawale</span>
+      </div>
+      <div class="trust-divider"></div>
+      
+      <!-- HIGHLIGHTED TRUST ITEM -->
+      <div class="trust-item highlight">
+        <span class="trust-num">#1</span>
+        <span class="trust-label">Most Trusted Driving School</span>
+        <span class="trust-sub">The go-to choice for driving training in Pimple Saudagar & Punawale</span>
+      </div>
+      
+      <div class="trust-divider"></div>
+      <div class="trust-item">
+        <span class="trust-num">3</span>
+        <span class="trust-label">Branches Across Pune</span>
+        <span class="trust-sub">Conveniently located so you never have to travel far</span>
+      </div>
+    </div>
+
+    <div class="women-banner reveal">
+      <svg class="women-icon-svg" viewBox="0 0 120 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Head -->
+        <circle cx="60" cy="28" r="18" fill="var(--red)" opacity="0.15" stroke="var(--red)" stroke-width="2.5"/>
+        <!-- Hair flowing -->
+        <path d="M42 22 Q38 10 50 8 Q60 4 70 8 Q82 10 78 22" fill="var(--red)" opacity="0.4"/>
+        <path d="M42 22 Q36 30 38 42" stroke="var(--red)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.4"/>
+        <path d="M78 22 Q82 30 80 40" stroke="var(--red)" stroke-width="3" stroke-linecap="round" fill="none" opacity="0.4"/>
+        <!-- Smile -->
+        <path d="M54 32 Q60 38 66 32" stroke="var(--red)" stroke-width="2" stroke-linecap="round" fill="none"/>
+        <!-- Eyes -->
+        <circle cx="54" cy="26" r="2" fill="var(--red)"/>
+        <circle cx="66" cy="26" r="2" fill="var(--red)"/>
+        <!-- Body / shoulders -->
+        <path d="M38 58 Q60 50 82 58 L86 100 L34 100 Z" fill="var(--red)" opacity="0.1" stroke="var(--red)" stroke-width="2"/>
+        <!-- Neck -->
+        <line x1="60" y1="46" x2="60" y2="58" stroke="var(--red)" stroke-width="3" stroke-linecap="round"/>
+        <!-- Right arm raised holding keys -->
+        <path d="M76 68 Q90 58 96 48" stroke="var(--red)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <!-- Keys -->
+        <circle cx="100" cy="44" r="6" stroke="var(--red)" stroke-width="2.5" fill="none"/>
+        <line x1="106" y1="44" x2="116" y2="52" stroke="var(--red)" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="110" y1="46" x2="118" y2="42" stroke="var(--red)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="112" y1="50" x2="120" y2="50" stroke="var(--red)" stroke-width="2" stroke-linecap="round"/>
+        <!-- Left arm down -->
+        <path d="M44 68 Q32 78 30 90" stroke="var(--red)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <!-- Car window frame behind person -->
+        <rect x="20" y="95" width="80" height="40" rx="4" fill="none" stroke="var(--red)" stroke-width="2" opacity="0.3"/>
+        <path d="M20 110 Q60 104 100 110" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round" fill="none" opacity="0.3"/>
+      </svg>
+      <div class="women-text">
+        <span class="women-title">Empowering Women Drivers</span>
+        <span class="women-sub">We actively encourage and focus on women to become confident, independent drivers — because every woman deserves the freedom of the road.</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PACKAGES -->
+<section id="courses">
+  <div class="si">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:2rem;">
+      <div>
+        <div class="eyebrow">Training Packages</div>
+        <h2 class="sec-title">Choose Your Course</h2>
+        <p class="sec-sub">Tailored structural setups focused on real-world precision tracking. Select your framework below.</p>
+      </div>
+      <div style="flex-shrink:0;">
+        <img src="assets/images/safety_nobg.png" alt="Safety" style="width:280px; height:280px; object-fit:contain; filter:drop-shadow(0 4px 16px rgba(93,13,24,0.13)); opacity:0.92;">
+      </div>
+    </div>
+  </div>
+  
+  <div class="pkg-grid reveal">
+    <!-- BASIC -->
+    <div class="pkg">
+      <div class="pkg-label">Package 01</div>
+      <div class="pkg-name">Basic</div>
+      <div class="pkg-highlight">✨ Group Training with 3 People (Duration: 1 Hr)</div>
+      <div class="pkg-vehicle">Honda City Training Matrix</div>
+      <div class="pkg-price-block">
+        <div class="pkg-with">With License</div>
+        <div class="pkg-amount">₹7,500</div>
+        <div class="pkg-without">Without License: ₹4,000</div>
+      </div>
+      <ul class="pkg-features">
+        <li>Batch configuration — 3 persons</li>
+        <li>1-Hour dedicated block duration</li>
+        <li>6 km system driving run per user</li>
+        <li>Day & Night module shifts</li>
+        <li>Pawna Dam altitude ghat training</li>
+        <li>RTO paperwork support maps</li>
+      </ul>
+      <a href="tel:8669454636" class="pkg-cta">Enquire Via Call</a>
+    </div>
+
+    <!-- STANDARD -->
+    <div class="pkg featured">
+      <div class="pkg-badge">Popular</div>
+      <div class="pkg-label">Package 02</div>
+      <div class="pkg-name">Standard</div>
+      <div class="pkg-highlight">⭐ Highlight: 8KM Individual Training</div>
+      <div class="pkg-vehicle">Honda City · Personalized Route</div>
+      <div class="pkg-price-block">
+        <div class="pkg-with">With License</div>
+        <div class="pkg-amount">₹8,500</div>
+        <div class="pkg-without">Without License: ₹5,000</div>
+      </div>
+      <ul class="pkg-features">
+        <li>Guaranteed 8 km driving run per session</li>
+        <li>Flexible scheduled operations</li>
+        <li>Pawna Dam structural elevation runs</li>
+        <li>Full RTO endorsement lifecycle alignment</li>
+        <li>Optional Brezza upgrade block</li>
+      </ul>
+      <a href="tel:8669454636" class="pkg-cta">Enquire Via Call</a>
+    </div>
+
+    <!-- PREMIUM -->
+    <div class="pkg">
+      <div class="pkg-label">Package 03</div>
+      <div class="pkg-name">Premium</div>
+      <div class="pkg-highlight">⚡ Highlight: 12KM in Brezza from Day 1 Individual</div>
+      <div class="pkg-vehicle">Maruti Suzuki Brezza Elite Plan</div>
+      <div class="pkg-price-block">
+        <div class="pkg-with">With License</div>
+        <div class="pkg-amount">₹10,500</div>
+        <div class="pkg-without">Without License: ₹7,000</div>
+      </div>
+      <ul class="pkg-features">
+        <li>Brezza SUV control environment from Day 1</li>
+        <li>Extended 12 km premium path per day</li>
+        <li>Advanced night & high speed highway runs</li>
+        <li>Pawna Dam complex curve navigation</li>
+        <li>Priority RTO logistics execution</li>
+      </ul>
+      <a href="tel:8669454636" class="pkg-cta">Enquire Via Call</a>
+    </div>
+  </div>
+
+  <!-- RTO 8 TRACK PRACTICE BANNER -->
+  <div class="si reveal">
+    <div class="track-banner">
+      <h3>🎯 Exam Advantage Block</h3>
+      <p>Includes One Day 8-Track comprehensive layout practice before your official RTO practical driving exam.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TRAINING / TIMINGS / LOCATIONS -->
+<section id="training">
+  <div class="si">
+    <div class="eyebrow">Curriculum & Assets</div>
+    <h2 class="sec-title">What You'll Master</h2>
+    <p class="sec-sub">Trained theoretically & practically as per RTO rules. Every module is covered systematically.</p>
+    
+    <div class="training-layout">
+      <div class="reveal">
+        <ul class="module-list">
+          <li class="module-item">Highway Training</li>
+          <li class="module-item">Ghat Training</li>
+          <li class="module-item">Reverse Training</li>
+          <li class="module-item">Steering Training</li>
+          <li class="module-item">Traffic Training</li>
+          <li class="module-item">Night Training</li>
+          <li class="module-item">Zic-Zac Training</li>
+          <li class="module-item">Off-Road Training</li>
+          <li class="module-item">Rough Road Training</li>
+          <li class="module-item">Parking Training</li>
+          <li class="module-item">8-Track Manoeuvre</li>
+          <li class="module-item">H-Track Manoeuvre</li>
+          <li class="module-item">S-Track Manoeuvre</li>
+          <li class="module-item">Vehicle Maintenance</li>
+          <li class="module-item">Road Safety Training</li>
+          <li class="module-item">Tyre Replacement</li>
+        </ul>
+        <div style="margin-top:2.5rem; display:flex; justify-content:center; align-items:center;">
+          <img src="assets/images/drive_safely_nobg.png" alt="Drive Safely" style="width:260px; height:260px; object-fit:contain; filter: drop-shadow(0 4px 16px rgba(93,13,24,0.15));">
+        </div>
+      </div>
+      
+      <div class="reveal">
+        <!-- Structural Batches -->
+        <div class="timing-block">
+          <h3>Batch Parameters</h3>
+          <div class="t-row"><span>Morning Batch</span><span class="t-val">6:00 AM – 1:00 PM</span></div>
+          <div class="t-row"><span>Evening Batch</span><span class="t-val">4:00 PM – 9:00 PM</span></div>
+          <div class="t-row"><span>Course Validity Window</span><span class="t-val">Must complete within 60 Days</span></div>
+        </div>
+
+        <!-- Authorized Locations -->
+        <div class="timing-block" style="margin-top:2rem;">
+          <h3 style="color:var(--red); text-transform:uppercase;">Hub Branches & Testing Fields</h3>
+          <div class="t-row"><span>Pimple Saudagar Branch</span><span class="t-val" style="color:var(--black); font-weight:700;">Vision 9 Mall Hub</span></div>
+          <div class="t-row"><span>Punawale Branch 1</span><span class="t-val" style="color:var(--black); font-weight:700;">Wardhman Palm Hub</span></div>
+          <div class="t-row" style="border:none;"><span>Punawale Branch 2</span><span class="t-val" style="color:var(--red); font-weight:700;">Tajne Wasti (Opp Adhira School)</span></div>
+        </div>
+
+        <!-- Fleet Grid -->
+        <div class="vehicles-block">
+          <h3>Training Fleet Setup</h3>
+          <div class="v-card">
+            <div>
+              <div class="v-name">Swift VDI</div>
+              <div class="v-pkg">Available Exclusively At: <span style="color:var(--black); font-weight:700;">Punawale Branch Only</span></div>
+            </div>
+            <div style="display:flex;align-items:center;gap:0.8rem;">
+              <svg class="v-car-icon" viewBox="0 0 90 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M8 30 L18 16 Q26 10 42 10 L62 10 Q72 10 78 18 L84 30 L84 38 L8 38 Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" fill="none"/>
+                <circle cx="24" cy="38" r="6" stroke="currentColor" stroke-width="2.5" fill="none"/>
+                <circle cx="68" cy="38" r="6" stroke="currentColor" stroke-width="2.5" fill="none"/>
+                <line x1="42" y1="10" x2="40" y2="30" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+              <span style="color:var(--muted);font-size:.8rem;font-weight:700;">Hatchback</span>
+            </div>
+          </div>
+          <div class="v-card">
+            <div><div class="v-name">Honda City IV Tech</div><div class="v-pkg">Basic / Standard Units</div></div>
+            <div style="display:flex;align-items:center;gap:0.8rem;">
+              <svg class="v-car-icon" viewBox="0 0 100 45" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 30 L18 18 Q26 10 44 10 L66 10 Q78 10 86 18 L94 30 L94 38 L6 38 Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" fill="none"/>
+                <circle cx="24" cy="38" r="6" stroke="currentColor" stroke-width="2.5" fill="none"/>
+                <circle cx="76" cy="38" r="6" stroke="currentColor" stroke-width="2.5" fill="none"/>
+                <path d="M44 10 L42 30" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <path d="M18 20 Q50 14 82 20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+              </svg>
+              <span style="color:var(--muted);font-size:.8rem;font-weight:700;">Sedan</span>
+            </div>
+          </div>
+          <div class="v-card">
+            <div><div class="v-name">Maruti Suzuki Brezza</div><div class="v-pkg">Premium Tier Platform</div></div>
+            <div style="display:flex;align-items:center;gap:0.8rem;">
+              <svg class="v-car-icon" viewBox="0 0 100 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 34 L14 16 Q20 8 40 8 L68 8 Q82 8 88 18 L96 34 L96 42 L6 42 Z" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round" fill="none"/>
+                <circle cx="24" cy="42" r="7" stroke="currentColor" stroke-width="2.5" fill="none"/>
+                <circle cx="78" cy="42" r="7" stroke="currentColor" stroke-width="2.5" fill="none"/>
+                <line x1="40" y1="8" x2="40" y2="34" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <line x1="6" y1="26" x2="96" y2="26" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="4 3"/>
+              </svg>
+              <span style="color:var(--muted);font-size:.8rem;font-weight:700;">SUV</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RTO WORK DEDICATED MATRIX -->
+<section id="rto">
+  <div class="si">
+    <div class="eyebrow">RTO Services Ecosystem</div>
+    <h2 class="sec-title">RTO Work Operations</h2>
+    <p class="sec-sub">Complete structural handling of documentation, title changes, clearing processes, and diagnostic protocols.</p>
+    
+    <div class="rto-grid reveal">
+      <!-- VEHICLE RELATED WORK -->
+      <div class="rto-block">
+        <h3>1. Vehicle Related Work</h3>
+        <ul class="rto-list">
+          <li>Ownership Transfer Processing</li>
+          <li>Insurance Related Query Resolution</li>
+          <li>Car Extension Authorizations</li>
+          <li>Official Change of Address Updates</li>
+          <li>Hypothecation Termination (HP Cancel)</li>
+          <li>Duplicate RC Book Issuance</li>
+          <li>Date Case Legal Management</li>
+          <li>NOC Issue Logs</li>
+          <li>NOC Cancellation Management</li>
+          <li>New Vehicle Registration Protocol</li>
+        </ul>
+      </div>
+      
+      <!-- LICENSE RELATED SERVICE -->
+      <div class="rto-block">
+        <h3>1. License Related Service</h3>
+        <ul class="rto-list">
+          <li>All Types of Driver Licenses Managed</li>
+          <li>Change of Name inside Active License</li>
+          <li>Change of Address inside Profile</li>
+          <li>Renewal of Expired Licenses</li>
+          <li>Change of Birth Date Parameters</li>
+          <li>Issue of International Driving Permit (IDP)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BEYOND BASIC LESSONS -->
+<section id="services" style="padding:0">
+  <div class="si" style="max-width:100%;padding:4rem 5%">
+    <div class="eyebrow">What Makes Us Different</div>
+    <h2 class="sec-title" style="margin-bottom:2.5rem">Beyond Basic Lessons</h2>
+  </div>
+  <div class="services-grid">
+    <div class="svc reveal"><span class="svc-icon">🌙</span><h3>Night Training</h3><p>Dedicated shifts after dark</p></div>
+    <div class="svc reveal"><span class="svc-icon">⛰️</span><h3>Ghat Controls</h3><p>Real slopes at Pawna Dam</p></div>
+    <div class="svc reveal"><span class="svc-icon">🛣️</span><h3>Expressways</h3><p>High-speed line experience</p></div>
+    <div class="svc reveal"><span class="svc-icon">🔄</span><h3>Precision Parking</h3><p>Reverse angle algorithms</p></div>
+    <div class="svc reveal"><span class="svc-icon">🔧</span><h3>Maintenance</h3><p>Tyre swap procedures</p></div>
+    <div class="svc reveal"><span class="svc-icon">📋</span><h3>RTO Bureaucracy</h3><p>Full service end-to-end</p></div>
+  </div>
+</section>
+
+<!-- GOOGLE REVIEWS SECTION -->
+<section id="reviews">
+  <div class="si">
+    <div class="eyebrow">Verification</div>
+    <h2 class="sec-title">Google Reviews</h2>
+    <p class="sec-sub">See verified feedback directly from trainees across our 3 branches in Pimple Saudagar and Punawale.</p>
+
+    <div class="reviews-slideshow reveal">
+      <div class="reviews-track" id="reviewsTrack">
+
+        <div class="review-card">
+          <div class="rev-stars">★★★★★</div>
+          <p class="rev-text">"I had a really good experience of learning driving at Aarohi car driving school. Chirayu sir and Mahesh sir are very patient, knowledgeable and explained everything step by step."</p>
+          <span class="rev-user">Tejas Deshpande</span>
+          <span class="rev-platform">via Google Maps Reviews</span>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-stars">★★★★★</div>
+          <p class="rev-text">"I had a really good experience learning to drive at the Aarohi car driving school. Chirayo Sir and Mahesh Sir are very patient and experienced trainers. They taught me step by step and removed my fear, making me feel confident throughout."</p>
+          <span class="rev-user">Deepika Shah</span>
+          <span class="rev-platform">via Google Maps Reviews</span>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-stars">★★★★★</div>
+          <p class="rev-text">"I had a fantastic experience learning to drive here. A huge thank you to both Chirayu Sir and Mahesh Sir, who are excellent instructors. They teach incredibly well, build your confidence, and ensure you are ready for real-world driving."</p>
+          <span class="rev-user">Vaibhav Chakane</span>
+          <span class="rev-platform">via Google Maps Reviews</span>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-stars">★★★★★</div>
+          <p class="rev-text">"I recently completed driving training at Aarohi motor driving school, Pimple Saudagar. It was a wonderful experience with this school."</p>
+          <span class="rev-user">Priyanka Dandekar</span>
+          <span class="rev-platform">via Google Maps Reviews</span>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-stars">★★★★★</div>
+          <p class="rev-text">"Really worth it to join this Motor Driving School. Thank you so much Aashish and Omkar Sir for making me confident to drive a car perfectly. Had lot of fun while training — ghat training was one of the most memorable days for me."</p>
+          <span class="rev-user">Google Review</span>
+          <span class="rev-platform">via Google Maps Reviews</span>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-stars">★★★★★</div>
+          <p class="rev-text">"My experience with Aarohi Motor Driving School was truly excellent! They provided the best of the best service and really value your time. What I appreciated the most was how patiently they teach — they give you enough time to learn at your own pace."</p>
+          <span class="rev-user">Aayush Shah</span>
+          <span class="rev-platform">via Google Maps Reviews</span>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-stars">★★★★★</div>
+          <p class="rev-text">"I recently completed my driving course here and had a pleasant experience. Both Chirayu dada and Mahesh dada are incredibly patient, cooperative, and highly professional in their training standards. They train you smoothly and correct your mistakes gently."</p>
+          <span class="rev-user">Shital Vikhe</span>
+          <span class="rev-platform">via Google Maps Reviews</span>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-stars">★★★★★</div>
+          <p class="rev-text">"Excellent Driving School – Highly Recommended! I recently completed my driving lessons at this school, and I couldn't be happier with my experience. A huge thank you to my instructors, Chirayu and Mahesh."</p>
+          <span class="rev-user">Rohit Kumar</span>
+          <span class="rev-platform">via Google Maps Reviews</span>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-stars">★★★★★</div>
+          <p class="rev-text">"Great experience learning at Aarohi Car Driving School. Chirayu sir and Mahesh sir were patient, clear, and very supportive, which helped build my confidence. The practical road tips and well-organized sessions made learning easy, and the ghat/highway training was a big plus. Highly recommended!"</p>
+          <span class="rev-user">Jisha J Nair</span>
+          <span class="rev-platform">via Google Maps Reviews</span>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-stars">★★★★★</div>
+          <p class="rev-text">"They have a very good team of instructors — very informative and supportive. The class timings are managed very efficiently. They teach on a range of different cars, therefore you end up with road experience on multiple vehicles."</p>
+          <span class="rev-user">Iqbal Siddiqui</span>
+          <span class="rev-platform">via Google Maps Reviews</span>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-stars">★★★★★</div>
+          <p class="rev-text">"I got a reference from my brother who completed training from Aarohi motor driving school, so I went to discuss with them about the training course. As I live in the United Kingdom and will be finally applying and getting a driving licence, I found their guidance very helpful."</p>
+          <span class="rev-user">Priyanka Kamble</span>
+          <span class="rev-platform">via Google Maps Reviews</span>
+        </div>
+
+        <div class="review-card">
+          <div class="rev-stars">★★★★★</div>
+          <p class="rev-text">"I visited many driving schools but was not satisfied with the trainers and course modules. While searching on Google, I found good reviews about Aarohi. I first met Chirayu Sir, and I was quite satisfied with the course module he explained."</p>
+          <span class="rev-user">Shubham Barnwal</span>
+          <span class="rev-platform">via Google Maps Reviews · Local Guide</span>
+        </div>
+
+      </div>
+
+      <div class="rev-nav">
+        <button class="rev-btn" id="revPrev" aria-label="Previous">&#8592;</button>
+        <div class="rev-dots" id="revDots"></div>
+        <button class="rev-btn" id="revNext" aria-label="Next">&#8594;</button>
+      </div>
+    </div>
+
+    <div class="rev-maps-cta reveal">
+      <p class="rev-maps-label">Find us on Google Maps</p>
+      <div class="rev-maps-btns">
+        <a href="https://maps.app.goo.gl/sEXizKiVYUtdvTWD9" target="_blank" rel="noopener" class="rev-maps-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          Pimple Saudagar
+        </a>
+        <a href="https://maps.app.goo.gl/xvhn4VQu9pU2gLKS8" target="_blank" rel="noopener" class="rev-maps-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          Punawale – Wardhman Palm
+        </a>
+        <a href="https://maps.app.goo.gl/ZE6M4tUtQMYftTdp6" target="_blank" rel="noopener" class="rev-maps-btn">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          Punawale – Tajne Wasti
+        </a>
+      </div>
+      <p class="rev-maps-sub">See all reviews, photos &amp; get directions</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="si">
+    <div class="contact-grid">
+      <div class="contact-info reveal">
+        <div class="eyebrow">Secure Seat</div>
+        <h2 class="sec-title">Start Your Journey</h2>
+        <p class="sec-sub">Connect directly to register into our driving curriculum immediately.</p>
+        
+        <div class="c-row">
+          <div class="c-line"></div>
+          <div class="c-content">
+            <div class="c-label">Primary Channels</div>
+            <div class="c-val">
+              <a href="tel:8669454636">86694 54636</a> &nbsp;·&nbsp; 
+              <a href="tel:7385023024">73850 23024</a>
+            </div>
+          </div>
+        </div>
+        
+        <div class="c-row">
+          <div class="c-line"></div>
+          <div class="c-content">
+            <div class="c-label">Our 3 Branches</div>
+            <div class="c-val" style="font-size:0.85rem; line-height:1.6;">
+              • Pimple Saudagar: Vision 9 Mall<br>
+              • Punawale: Wardhman Palm<br>
+              • Punawale: Tajne Wasti, Opp Adhira School
+            </div>
+          </div>
+        </div>
+        
+        <div class="c-row">
+          <div class="c-line"></div>
+          <div class="c-content">
+            <div class="c-label">Instagram Digital Handle</div>
+            <div class="c-val"><a href="https://instagram.com/aarohimds0024" target="_blank">@aarohimds0024</a></div>
+          </div>
+        </div>
+        
+        <a href="https://wa.me/918669454636?text=Hi%20Aarohi%20Driving%20School!%20I%20want%20to%20enroll.%20Please%20send%20details." class="whatsapp" target="_blank">
+          💬 &nbsp; Dispatch WhatsApp Query
+        </a>
+      </div>
+      
+      <div class="reveal">
+        <div class="hours-block">
+          <h3>Active Operational Shifts</h3>
+          <div class="h-row"><span>Morning Batch Group</span><span class="h-time">6:00 AM – 1:00 PM</span></div>
+          <div class="h-row"><span>Evening Batch Group</span><span class="h-time">4:00 PM – 9:00 PM</span></div>
+          <div class="h-row"><span>Monday – Saturday</span><span class="h-time">All Batches Live</span></div>
+          <div class="h-row"><span>Sunday Window</span><span class="h-time">Morning Shifts Only</span></div>
+        </div>
+        <div style="margin-top:2rem; display:flex; justify-content:center; align-items:flex-end;">
+          <img src="assets/images/girl_driving_car_nobg.png" alt="Girl Driving Car" style="width:100%; max-width:380px; object-fit:contain; filter:drop-shadow(0 4px 20px rgba(93,13,24,0.12));">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY SECTION -->
+<section id="gallery">
+  <div class="si">
+    <div class="eyebrow">Media Feed</div>
+    <h2 class="sec-title">Training Gallery</h2>
+    <p class="sec-sub">Visual documentation of live setups, fleet distributions, and track sessions across regional branches.</p>
+    
+    <div class="gallery-grid reveal">
+      <!-- 16 WebP Images -->
+      <div class="gallery-item" onclick="openLightbox(0)"><img src="assets/images/unnamed%20(1).webp" alt="Aarohi Setup 1" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(1)"><img src="assets/images/unnamed%20(2).webp" alt="Aarohi Setup 2" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(2)"><img src="assets/images/unnamed%20(3).webp" alt="Aarohi Setup 3" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(3)"><img src="assets/images/unnamed%20(4).webp" alt="Aarohi Setup 4" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(4)"><img src="assets/images/unnamed%20(5).webp" alt="Aarohi Setup 5" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(5)"><img src="assets/images/unnamed%20(6).webp" alt="Aarohi Setup 6" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(6)"><img src="assets/images/unnamed%20(7).webp" alt="Aarohi Setup 7" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(7)"><img src="assets/images/unnamed%20(8).webp" alt="Aarohi Setup 8" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(8)"><img src="assets/images/unnamed%20(9).webp" alt="Aarohi Setup 9" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(9)"><img src="assets/images/unnamed%20(11).webp" alt="Aarohi Setup 11" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(10)"><img src="assets/images/unnamed%20(12).webp" alt="Aarohi Setup 12" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(11)"><img src="assets/images/unnamed%20(13).webp" alt="Aarohi Setup 13" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(12)"><img src="assets/images/unnamed%20(14).webp" alt="Aarohi Setup 14" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(13)"><img src="assets/images/unnamed%20(15).webp" alt="Aarohi Setup 15" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(14)"><img src="assets/images/unnamed%20(16).webp" alt="Aarohi Setup 16" loading="lazy"></div>
+      <div class="gallery-item" onclick="openLightbox(15)"><img src="assets/images/unnamed%20(17).webp" alt="Aarohi Setup 17" loading="lazy"></div>
+
+      <!-- 11 MP4 Local Video Clips -->
+      <div class="gallery-item" onclick="openLightbox(16)">
+        <span class="video-badge">Vid</span>
+        <video src="assets/videos/videoplayback.mp4" muted playsinline preload="metadata"></video>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(17)">
+        <span class="video-badge">Vid</span>
+        <video src="assets/videos/videoplayback_2.mp4" muted playsinline preload="metadata"></video>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(18)">
+        <span class="video-badge">Vid</span>
+        <video src="assets/videos/videoplayback_3.mp4" muted playsinline preload="metadata"></video>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(19)">
+        <span class="video-badge">Vid</span>
+        <video src="assets/videos/videoplayback_4.mp4" muted playsinline preload="metadata"></video>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(20)">
+        <span class="video-badge">Vid</span>
+        <video src="assets/videos/videoplayback_5.mp4" muted playsinline preload="metadata"></video>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(21)">
+        <span class="video-badge">Vid</span>
+        <video src="assets/videos/videoplayback_6.mp4" muted playsinline preload="metadata"></video>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(22)">
+        <span class="video-badge">Vid</span>
+        <video src="assets/videos/videoplayback_7.mp4" muted playsinline preload="metadata"></video>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(23)">
+        <span class="video-badge">Vid</span>
+        <video src="assets/videos/videoplayback_8.mp4" muted playsinline preload="metadata"></video>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(24)">
+        <span class="video-badge">Vid</span>
+        <video src="assets/videos/videoplayback_9.mp4" muted playsinline preload="metadata"></video>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(25)">
+        <span class="video-badge">Vid</span>
+        <video src="assets/videos/videoplayback_10.mp4" muted playsinline preload="metadata"></video>
+      </div>
+      <div class="gallery-item" onclick="openLightbox(26)">
+        <span class="video-badge">Vid</span>
+        <video src="assets/videos/videoplayback_11.mp4" muted playsinline preload="metadata"></video>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LIGHTBOX OVERLAY MODAL -->
+<div id="lightboxModal" class="lightbox-modal">
+  <div class="lightbox-content">
+    <button class="lightbox-btn lightbox-close" onclick="closeLightbox()">✕</button>
+    <button class="lightbox-btn lightbox-prev" onclick="changeImage(-1)">←</button>
+    
+    <img id="lightboxImg" class="lightbox-img" src="" alt="Expanded View">
+    <video id="lightboxVideo" class="lightbox-video" src="" controls autoplay></video>
+    
+    <button class="lightbox-btn lightbox-next" onclick="changeImage(1)">→</button>
+  </div>
+</div>
+
+<!-- ENROLLMENT DOCUMENTS & TERMS -->
+<section id="documents">
+  <div class="si">
+    <div style="display:flex; align-items:center; justify-content:space-between; gap:2rem;">
+      <div>
+        <div class="eyebrow">Enrollment Matrix</div>
+        <h2 class="sec-title">Documents Required</h2>
+        <p class="sec-sub">Ensure all documentation is configured in original copies accompanied by at least one copy duplicate.</p>
+      </div>
+      <div style="flex-shrink:0;">
+        <img src="assets/images/boy_driving_car-removebg-preview.png" alt="Boy Driving Car" style="width:300px; height:auto; object-fit:contain; filter:drop-shadow(0 4px 20px rgba(93,13,24,0.12));">
+      </div>
+    </div>
+    
+    <div class="doc-grid reveal">
+      <div class="doc-card">
+        <h3>Age Validation <span style="color:var(--muted);font-size:.7rem">(Select One)</span></h3>
+        <ul class="doc-list">
+          <li>Date of Birth Certificate</li>
+          <li>School Leaving Certificate</li>
+          <li>10th Board Certificate Entry</li>
+          <li>PAN Card Card</li>
+          <li>Official Passport</li>
+        </ul>
+      </div>
+      <div class="doc-card">
+        <h3>Address Verification <span style="color:var(--muted);font-size:.7rem">(Select Two)</span></h3>
+        <ul class="doc-list">
+          <li>Aadhaar Card Database Proof</li>
+          <li>Election / Voter ID Card</li>
+          <li>LIC Policy Document</li>
+          <li>Official Passport</li>
+          <li>Electricity Board Utility Invoice</li>
+        </ul>
+      </div>
+      <div class="doc-card">
+        <h3>Additional Parameters</h3>
+        <ul class="doc-list">
+          <li>2 Recent Passport Size Photos</li>
+          <li>Existing License Registries (if any)</li>
+          <li>Marriage Certificate (if applicable)</li>
+          <li>Rental Lease Agreement Data</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- TERMS AND CONDITIONS SECTION -->
+    <!-- TERMS AND CONDITIONS SECTION -->
+    <div class="terms-container reveal">
+      <h3>⚠️ Terms and Conditions</h3>
+      <div class="terms-grid-list">
+        <div class="term-box">
+          <h4>Refund Architecture</h4>
+          <p>We follow a strict no refund policy upon admission processing.</p>
+        </div>
+        <div class="term-box">
+          <h4>Cabin Space Guidelines</h4>
+          <p>Family members are allowed inside the car up to twice during the training if they wish to observe their child's driving performance.</p>
+        </div>
+        <div class="term-box">
+          <h4>Course Completion Window</h4>
+          <p>You must completely finish your chosen course within 60 days max.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="f-brand-name">AAROHI <span>DRIVING SCHOOL</span></div>
+        <p class="f-brand-p">We teach you more than how to pass driving test. RTO approved systems operating through premier hubs at Pimple Saudagar and Punawale.</p>
+      </div>
+      <div class="f-col">
+        <h4>Navigation Links</h4>
+        <ul>
+          <li><a href="#courses">Packages Matrix</a></li>
+          <li><a href="#training">Training Paths</a></li>
+          <li><a href="#rto">RTO Work Matrix</a></li>
+          <li><a href="#gallery">Gallery Index</a></li>
+          <li><a href="#documents">Documents Policy</a></li>
+        </ul>
+      </div>
+      <div class="f-col">
+        <h4>Communication</h4>
+        <ul>
+          <li><a href="tel:8669454636">📞 86694 54636</a></li>
+          <li><a href="tel:7385023024">📞 73850 23024</a></li>
+          <li><span>📍 Pune, Maharashtra</span></li>
+          <li><a href="https://instagram.com/aarohimds0024" target="_blank">📸 @aarohimds0024</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Aarohi Driving School. All rights reserved.</p>
+      <p>Vision 9 Mall (Pimple Saudagar) · Wardhman Palm (Punawale) · Tajne Wasti (Punawale)</p>
+    </div>
+    <div class="footer-credit">
+      <a href="https://github.com/aayooos" target="_blank" rel="noopener" aria-label="Built by Aayoos">
+        Designed & Developed with ♥ by aayoos
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// --- Speed line Entrance ---
+window.addEventListener('load',()=>{
+  setTimeout(()=>document.getElementById('speedLines').classList.add('done'),1000);
+});
+
+// --- Dynamic Curved Road Animation ---
+document.addEventListener('DOMContentLoaded', () => {
+  const path = document.getElementById('curve-path');
+  const car = document.getElementById('scrolling-car');
+  const svg = document.getElementById('road-svg');
+  
+  if(path && car && svg) {
+    const pathLength = path.getTotalLength();
+    
+    const updateCar = () => {
+      const scrollTop = window.scrollY;
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      let progress = 0;
+      if (docHeight > 0) {
+        progress = scrollTop / docHeight;
+      }
+      
+      progress = Math.max(0, Math.min(1, progress));
+      const currentPoint = path.getPointAtLength(progress * pathLength);
+      const aheadPoint = path.getPointAtLength(Math.min(pathLength, (progress * pathLength) + 2));
+      const dx = aheadPoint.x - currentPoint.x;
+      const dy = aheadPoint.y - currentPoint.y;
+      const angle = (Math.atan2(dy, dx) * (180 / Math.PI)) + 90;
+      
+      const svgRect = svg.getBoundingClientRect();
+      const screenX = (currentPoint.x / 100) * svgRect.width;
+      const screenY = (currentPoint.y / 1000) * svgRect.height;
+      
+      car.style.transform = `translate(${screenX}px, ${screenY}px) rotate(${angle}deg)`;
+    };
+
+    window.addEventListener('scroll', updateCar);
+    window.addEventListener('resize', updateCar);
+    updateCar();
+  }
+});
+
+// --- Speedometer ---
+function animateSpeedo(){
+  const needle=document.getElementById('speedo-needle');
+  const arc=document.getElementById('speedo-arc');
+  if(!needle)return;
+  setTimeout(()=>{needle.style.transform='rotate(50deg)';if(arc)arc.style.strokeDashoffset='0';},300);
+  setTimeout(()=>{needle.style.transform='rotate(-40deg)';},2000);
+}
+
+// --- Observers ---
+const reveals=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('visible'),i*60);
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:0.04});
+reveals.forEach(el=>obs.observe(el));
+
+const heroObs=new IntersectionObserver(entries=>{
+  if(entries[0].isIntersecting)animateSpeedo();
+},{threshold:0.3});
+heroObs.observe(document.querySelector('.hero'));
+
+// ─── UNIFIED LIGHTBOX Controls ───
+let currentMediaIndex = 0;
+const mediaGalleryArray = [
+  { type: "image", path: "assets/images/unnamed%20(1).webp" },
+  { type: "image", path: "assets/images/unnamed%20(2).webp" },
+  { type: "image", path: "assets/images/unnamed%20(3).webp" },
+  { type: "image", path: "assets/images/unnamed%20(4).webp" },
+  { type: "image", path: "assets/images/unnamed%20(5).webp" },
+  { type: "image", path: "assets/images/unnamed%20(6).webp" },
+  { type: "image", path: "assets/images/unnamed%20(7).webp" },
+  { type: "image", path: "assets/images/unnamed%20(8).webp" },
+  { type: "image", path: "assets/images/unnamed%20(9).webp" },
+  { type: "image", path: "assets/images/unnamed%20(11).webp" },
+  { type: "image", path: "assets/images/unnamed%20(12).webp" },
+  { type: "image", path: "assets/images/unnamed%20(13).webp" },
+  { type: "image", path: "assets/images/unnamed%20(14).webp" },
+  { type: "image", path: "assets/images/unnamed%20(15).webp" },
+  { type: "image", path: "assets/images/unnamed%20(16).webp" },
+  { type: "image", path: "assets/images/unnamed%20(17).webp" },
+  
+  { type: "video", path: "assets/videos/videoplayback.mp4" },
+  { type: "video", path: "assets/videos/videoplayback_2.mp4" },
+  { type: "video", path: "assets/videos/videoplayback_3.mp4" },
+  { type: "video", path: "assets/videos/videoplayback_4.mp4" },
+  { type: "video", path: "assets/videos/videoplayback_5.mp4" },
+  { type: "video", path: "assets/videos/videoplayback_6.mp4" },
+  { type: "video", path: "assets/videos/videoplayback_7.mp4" },
+  { type: "video", path: "assets/videos/videoplayback_8.mp4" },
+  { type: "video", path: "assets/videos/videoplayback_9.mp4" },
+  { type: "video", path: "assets/videos/videoplayback_10.mp4" },
+  { type: "video", path: "assets/videos/videoplayback_11.mp4" }
+];
+
+function openLightbox(index) {
+  currentMediaIndex = index;
+  document.getElementById("lightboxModal").style.display = "flex";
+  document.body.style.overflow = "hidden";
+  renderActiveMedia();
+}
+
+function closeLightbox() {
+  const videoPlayer = document.getElementById("lightboxVideo");
+  videoPlayer.pause();
+  videoPlayer.src = "";
+  document.getElementById("lightboxModal").style.display = "none";
+  document.body.style.overflow = "auto";
+}
+
+function renderActiveMedia() {
+  const currentMedia = mediaGalleryArray[currentMediaIndex];
+  const imgElement = document.getElementById("lightboxImg");
+  const videoElement = document.getElementById("lightboxVideo");
+
+  if (currentMedia.type === "image") {
+    videoElement.style.display = "none";
+    videoElement.pause();
+    videoElement.src = "";
+    
+    imgElement.src = currentMedia.path;
+    imgElement.style.display = "block";
+  } else if (currentMedia.type === "video") {
+    imgElement.style.display = "none";
+    imgElement.src = "";
+    
+    videoElement.src = currentMedia.path;
+    videoElement.style.display = "block";
+    videoElement.load();
+    videoElement.play().catch(err => console.log("Autoplay caught by browser restrictions"));
+  }
+}
+
+function changeImage(direction) {
+  currentMediaIndex += direction;
+  if (currentMediaIndex >= mediaGalleryArray.length) currentMediaIndex = 0;
+  if (currentMediaIndex < 0) currentMediaIndex = mediaGalleryArray.length - 1;
+  renderActiveMedia();
+}
+
+document.addEventListener('keydown', (e) => {
+  const modal = document.getElementById("lightboxModal");
+  if (modal.style.display === "flex") {
+    if (e.key === "Escape") closeLightbox();
+    if (e.key === "ArrowRight") changeImage(1);
+    if (e.key === "ArrowLeft") changeImage(-1);
+  }
+});
+
+// ── REVIEWS SLIDESHOW ──
+(function(){
+  const track = document.getElementById('reviewsTrack');
+  const cards = track ? track.querySelectorAll('.review-card') : [];
+  const dotsContainer = document.getElementById('revDots');
+  const prevBtn = document.getElementById('revPrev');
+  const nextBtn = document.getElementById('revNext');
+  if(!cards.length) return;
+  let current = 0;
+  const total = cards.length;
+  cards.forEach((_,i)=>{
+    const d = document.createElement('span');
+    d.className = 'rev-dot' + (i===0?' active':'');
+    d.addEventListener('click',()=>goTo(i));
+    dotsContainer.appendChild(d);
+  });
+  function goTo(n){
+    current = (n + total) % total;
+    track.style.transform = `translateX(-${current * 100}%)`;
+    dotsContainer.querySelectorAll('.rev-dot').forEach((d,i)=>d.classList.toggle('active', i===current));
+  }
+  prevBtn.addEventListener('click',()=>goTo(current-1));
+  nextBtn.addEventListener('click',()=>goTo(current+1));
+  let timer = setInterval(()=>goTo(current+1), 5000);
+  [prevBtn,nextBtn].forEach(b=>b.addEventListener('click',()=>{clearInterval(timer);timer=setInterval(()=>goTo(current+1),5000);}));
+})();
+
+// ── MOBILE HAMBURGER TOGGLE ──
+document.querySelector('.hamburger').addEventListener('click', () => {
+  const links = document.querySelector('.nav-links');
+  if (links.style.display === 'flex') {
+    links.style.display = 'none';
+  } else {
+    links.style.display = 'flex';
+    links.style.flexDirection = 'column';
+    links.style.position = 'absolute';
+    links.style.top = '64px';
+    links.style.left = '0';
+    links.style.width = '100%';
+    links.style.background = '#FFFFFF';
+    links.style.padding = '1.5rem';
+    links.style.borderBottom = '1px solid var(--border)';
+    links.style.gap = '1.2rem';
+  }
+});
+</script>
+</body>
+</html>
